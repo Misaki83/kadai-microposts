@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 
 use App\User;
 
-class UsersCotroller extends Controller
+class UsersController extends Controller
 {
     public function index()
     {
@@ -70,6 +70,21 @@ class UsersCotroller extends Controller
         return view('users.followers', [
             'user' => $user,
             'users' => $followers,
+        ]);
+    }
+    
+    public function favorites($id)
+    {
+    
+        $user = User::findOrFail($id);
+        
+        $user->loadRelationshipCounts();
+        
+        $favorites = $user->favorites()->paginate(10);
+        
+        return view('users.favorite', [
+            'user' => $user,
+            'microposts' => $favorites,
         ]);
     }
     
